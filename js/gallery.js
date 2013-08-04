@@ -37,14 +37,13 @@ Gallery.prototype.next = function() {
     }
 
     var file = self.images.shift();
-    // none left to load
     if (!file) {
         return;
     }
 
     // create new image to insert
     var img = document.createElement('img');
-    img.src = '/img/thumb/' + file;
+    img.src = file;
 
     img.onload = function() {
         $(img).fadeIn(1000);

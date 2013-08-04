@@ -1,6 +1,7 @@
 var page = require('page');
 var Gallery = require('./gallery');
 var Filmstrip = require('./filmstrip');
+var aws = require('./list');
 
 // in place shuffle with fisher-yates
 function shuffle(arr) {
@@ -32,8 +33,8 @@ page('/', function(ctx, next) {
 
     filmstrip.enable();
 
-    // setup homepage filmstrip
-    $.getJSON('/img', function(res) {
+    // get all keys
+    aws.all(function(err, res) {
         filmstrip.load(shuffle(res));
     });
 });
@@ -74,7 +75,8 @@ page('/gallery/:size', function(ctx, next) {
     $('ul > li').removeClass('selected');
     $('#' + size).addClass('selected');
 
-    $.getJSON('/img/' + size, function(res) {
+    aws.loadsize(size, function(err, res) {
+        console.log(res);
         gallery.load(shuffle(res));
     });
 });
