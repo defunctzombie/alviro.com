@@ -77,7 +77,6 @@ page('/gallery/:size', function(ctx, next) {
     $('#' + size).addClass('selected');
 
     aws.loadsize(size, function(err, res) {
-        console.log(res);
         gallery.load(shuffle(res));
     });
 });
@@ -280,9 +279,13 @@ module.exports.loadsize = function(size, cb) {
     }
 
     files = files.filter(function(file) {
-      return RegExp('^sizes\/' + size + '\/.+').test(file.Key);
+      var url = 'sizes/' + size + '/';
+      if (file.Key === url) {
+        return false;
+      }
+      return file.Key.indexOf(url) === 0;
     }).map(function(file) {
-      return 'http://alviro.com.s3.amazonaws.com/' + file.Key;
+      return 'http://alviro.com.s3.amazonaws.com/' + file.Key.replace('+', '%2B');
     });
 
     return cb(null, files);

@@ -76,7 +76,6 @@ page('/gallery/:size', function(ctx, next) {
     $('#' + size).addClass('selected');
 
     aws.loadsize(size, function(err, res) {
-        console.log(res);
         gallery.load(shuffle(res));
     });
 });
